@@ -26,7 +26,7 @@ The `song_data` and `log_data` datasets are located in their respective director
 
 ### Database Schema Design
 
-![Sparkify database star schema](/home/workspace/data_modeling_with_postgres.png)
+![Sparkify database star schema](/udacity/data_engineering_nanodegree/data_modeling_with_postgres/images/db_star_schema.png)
 
 A star schema was chosen for the implementation of the project. It's a simple and popular schema which provides simpler queries and faster aggregrations allowing Sparkify to optimize for queries which assist in song play analysis. The schema includes the following tables:
 
