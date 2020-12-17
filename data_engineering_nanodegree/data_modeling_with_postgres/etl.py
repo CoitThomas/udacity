@@ -6,6 +6,10 @@ from sql_queries import *
 
 
 def process_song_file(cur, filepath):
+    """
+    Responsible for extracting a song record and an artist record from a given file and
+    inserting those records into their corresponding tables in the sparkify db.
+    """
     # open song file
     df = pd.read_json(filepath, typ='series')
 
@@ -19,6 +23,10 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    """
+    Responsible for extracting a time record, user record, and a songplay record from a given file
+    and inserting those records into their corresponding tables in the sparify db.
+    """
     # open log file
     df = pd.read_json(filepath, lines=True)
 
@@ -56,11 +64,17 @@ def process_log_file(cur, filepath):
             songid, artistid = None, None
 
         # insert songplay record
-        songplay_data = (row.ts, row.userId, row.level, songid, artistid, row.sessionId, row.location, row.userAgent)
-        cur.execute(songplay_table_insert, songplay_data)
+        if songid:
+            songplay_data = (row.ts, row.userId, row.level, songid, artistid, row.sessionId, row.location, row.userAgent)
+            cur.execute(songplay_table_insert, songplay_data)
 
 
 def process_data(cur, conn, filepath, func):
+    """
+    Scours the data directory for all song data and log data json files it can find.
+    After collecting the filepaths, the function iterates over each one and sends it off to be processed
+    by the function that was passed in with it.
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -80,6 +94,10 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    """
+    Connects to the sparkify database, finds all song and log data available, extracts all pertinent
+    records from the files, and inserts the records into their corresponding tables in the database.
+    """
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 
